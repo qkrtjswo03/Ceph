@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  config.json: |-
+    [
+      {
+        "clusterID": "60ba6e1e-2e4c-40e6-a2b7-98341db296c3", # <--- 단계 1에서 얻은 fsid 값으로 대체
+        "monitors": [
+          "192.168.20.14:6789"  # <--- 실제 Ceph 모니터 IP 및 포트로 대체 (여러 개일 경우 콤마로 구분하여 추가)
+                                  # 예: "192.168.20.107:6789", "192.168.20.108:6789", "192.168.20.109:6789"
+        ],
+        "cephFS": {
+          "subvolumeGroup": "kubernetes" # CephFS 볼륨 내에서 PVC들이 생성될 하위 그룹 이름 (일반적으로 'csi' 사용)
+                                         # 이 값은 'ceph fs subvolumegroup create <fs_name> <group_name>'으로 Ceph에서 미리 생성할 수도 있습니다.
+        }
+      }
+    ]
+metadata:
+  name: ceph-csi-config
+  # namespace: default # 문서상 명시되지 않았으므로 default 네임스페이스에 생성됨
+

@@ -1,0 +1,21 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: csi-fs-sc
+allowVolumeExpansion: true
+provisioner: cephfs.csi.ceph.com # CephFS CSI 드라이버의 프로비저너 이름
+parameters:
+  clusterID: 60ba6e1e-2e4c-40e6-a2b7-98341db296c3 # 단계 1에서 얻은 fsid 값으로 대체
+  fsName: kubernetes # 단계 2에서 생성한 CephFS 볼륨(파일시스템) 이름으로 대체
+
+  # Secret 정보 (프로비저닝, 컨트롤러 확장, 노드 스테이징 시 사용)
+  csi.storage.k8s.io/controller-expand-secret-name: csi-fs-secret
+  csi.storage.k8s.io/controller-expand-secret-namespace: default
+  csi.storage.k8s.io/provisioner-secret-name: csi-fs-secret
+  csi.storage.k8s.io/provisioner-secret-namespace: default
+  csi.storage.k8s.io/node-stage-secret-name: csi-fs-secret
+  csi.storage.k8s.io/node-stage-secret-namespace: default
+reclaimPolicy: Delete # PVC 삭제 시 PV 처리 정책 (Delete 또는 Retain)
+#mountOptions:
+#  - debug
+
